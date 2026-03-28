@@ -87,7 +87,7 @@ function switchSection(section) {
 // ── API FETCH ROUTER ────────────────────────────────────────────────────
 async function fetchData(section) {
     try {
-        const res = await fetch(`/api/${section}`);
+        const res = await fetch(`/api/${section}`, { cache: "no-store" });
         if(res.status === 400) { showError((await res.json()).error); return; }
         if(!res.ok) throw new Error("Server Error");
 
@@ -384,7 +384,9 @@ window.deleteRecord = async function(section, id) {
 
 // ── FORM SUBMISSIONS ────────────────────────────────────────────────────
 // Attach a handler for each form dynamically
-['players', 'teams', 'tournaments', 'venues', 'referees', 'registrations', 'matches', 'scores'].forEach(sec => {
+// ── FORM SUBMISSIONS ────────────────────────────────────────────────────
+// Attach a handler for each form dynamically
+;['players', 'teams', 'tournaments', 'venues', 'referees', 'registrations', 'matches', 'scores'].forEach(sec => {
     document.getElementById(`form-${sec}`).addEventListener('submit', async (e) => {
         e.preventDefault();
         const editingId = document.getElementById(`${sec}_edit_id`).value;
@@ -394,16 +396,38 @@ window.deleteRecord = async function(section, id) {
 
         try {
             const res = await fetch(url, {
-                method, headers: {"Content-Type":"application/json"}, body: JSON.stringify(data)
+                method,
+                headers: {"Content-Type":"application/json"},
+                body: JSON.stringify(data)
             });
-            const json = await res.json();
-            if(res.status === 400) { showError(json.error); return; }
-            if(!res.ok) throw new Error("Server");
 
+            // 1. Safely attempt to parse the response
+            let json;
+            try {
+                json = await res.json();
+            } catch (parseErr) {
+                // If Flask throws an uncaught Python Exception, it returns an HTML page, which breaks res.json()
+                console.error("Server returned a non-JSON response. Check your Flask terminal for a Python crash stack trace.");
+                showError(`Critical Server Error on ${sec}. Check console.`);
+                return;
+            }
+
+            // 2. Handle ALL HTTP error codes (400, 409, 500) and expose the database error
+            if (!res.ok) {
+                console.error(`Backend Database Rejection [${res.status}]:`, json);
+                // Display the actual database error to the UI
+                showError(json.error || `Database error. Check console for details.`);
+                return;
+            }
+
+            // 3. Success state
             closeModal();
             fetchData(sec);
+
         } catch(err) {
-            showError(`Error saving ${sec}.`);
+            // This now only catches actual network failures (e.g., server offline)
+            console.error("Network Fetch Error:", err);
+            showError(`Network error saving ${sec}. Is the backend running?`);
         }
     });
 });
