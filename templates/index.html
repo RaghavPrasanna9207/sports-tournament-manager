@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Sports Tournament Management System">
+    <title>Sports Tournament System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div class="error-banner" id="error-banner">
+        <span class="error-banner-icon">⚠️</span>
+        <span class="error-banner-text" id="error-banner-text"></span>
+        <button class="error-banner-close" id="error-banner-close" aria-label="Dismiss">&times;</button>
+    </div>
+
+    <div class="app-layout">
+
+        <!-- ── SIDEBAR NAVIGATION ── -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-brand">
+                <span class="sidebar-logo">🏆</span>
+                <h1 class="sidebar-title">Tournament<br><span class="gradient-text">System</span></h1>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active" data-section="players">
+                    <span class="nav-icon">👥</span><span class="nav-label">Players</span>
+                </a>
+                <a href="#" class="nav-item" data-section="teams">
+                    <span class="nav-icon">🏟️</span><span class="nav-label">Teams</span>
+                </a>
+                <a href="#" class="nav-item" data-section="tournaments">
+                    <span class="nav-icon">🏅</span><span class="nav-label">Tournaments</span>
+                </a>
+                <a href="#" class="nav-item" data-section="venues">
+                    <span class="nav-icon">📍</span><span class="nav-label">Venues</span>
+                </a>
+                <a href="#" class="nav-item" data-section="referees">
+                    <span class="nav-icon">🧑‍⚖️</span><span class="nav-label">Referees</span>
+                </a>
+                <a href="#" class="nav-item" data-section="registrations">
+                    <span class="nav-icon">📋</span><span class="nav-label">Registrations</span>
+                </a>
+                <a href="#" class="nav-item" data-section="matches">
+                    <span class="nav-icon">📅</span><span class="nav-label">Matches</span>
+                </a>
+                <a href="#" class="nav-item" data-section="scores">
+                    <span class="nav-icon">📊</span><span class="nav-label">Scores</span>
+                </a>
+            </nav>
+            <div class="sidebar-footer"><p>&copy; 2026 STS</p></div>
+        </aside>
+
+        <!-- ── MAIN CONTENT AREA ── -->
+        <main class="main-content" id="main-content">
+
+            <header class="content-header">
+                <div>
+                    <h2 class="page-title" id="page-title">Players</h2>
+                    <p class="page-subtitle" id="page-subtitle">Manage all registered players</p>
+                </div>
+                <!-- Single dynamic 'Add' button tailored to active section -->
+                <button class="btn btn-primary" id="btn-add-main" onclick="openModalForActiveSection()">
+                    <span class="btn-icon">＋</span> <span id="btn-add-text">Add Player</span>
+                </button>
+            </header>
+
+            <!-- Dynamic Stats Row -->
+            <div class="stats-row" id="stats-row">
+                <!-- Content populated by JS based on section -->
+            </div>
+
+            <!-- ── SECTIONS (Only one visible at a time) ── -->
+
+            <!-- 1. PLAYERS SECTION -->
+            <section class="table-card section-view" id="section-players">
+                <div class="table-toolbar">
+                    <input type="text" class="search-input" id="search-players" placeholder="Search players..." oninput="filterTables('players')">
+                    <button class="btn btn-ghost" onclick="fetchData('players')">🔄 Refresh</button>
+                </div>
+                <div class="table-wrapper">
+                    <table id="table-players">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Age</th>
+                                <th>Gender</th>
+                                <th>Position</th>
+                                <th>Team</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody-players"></tbody>
+                    </table>
+                </div>
+                <p class="empty-state" id="empty-players">No players found.</p>
+            </section>
+
+            <!-- 2. TEAMS SECTION -->
+            <section class="table-card section-view hidden" id="section-teams">
+                <div class="table-toolbar">
+                    <input type="text" class="search-input" id="search-teams" placeholder="Search teams..." oninput="filterTables('teams')">
+                    <button class="btn btn-ghost" onclick="fetchData('teams')">🔄 Refresh</button>
+                </div>
+                <div class="table-wrapper">
+                    <table id="table-teams">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Team Name</th>
+                                <th>Coach Name</th>
+                                <th>City</th>
+                                <th>Contact Number</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody-teams"></tbody>
+                    </table>
+                </div>
+                <p class="empty-state" id="empty-teams">No teams found.</p>
+            </section>
+
+            <!-- 3. TOURNAMENTS SECTION -->
+            <section class="table-card section-view hidden" id="section-tournaments">
+                <div class="table-toolbar">
+                    <input type="text" class="search-input" id="search-tournaments" placeholder="Search tournaments..." oninput="filterTables('tournaments')">
+                    <button class="btn btn-ghost" onclick="fetchData('tournaments')">🔄 Refresh</button>
+                </div>
+                <div class="table-wrapper">
+                    <table id="table-tournaments">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Sport Type</th>
+                                <th>Start Date</th>
+                                <th>End Date</th>
+                                <th>Location</th>
+                                <th>Organizer</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody-tournaments"></tbody>
+                    </table>
+                </div>
+                <p class="empty-state" id="empty-tournaments">No tournaments found.</p>
+            </section>
+
+            <!-- 4. VENUES SECTION -->
+            <section class="table-card section-view hidden" id="section-venues">
+                <div class="table-toolbar">
+                    <input type="text" class="search-input" id="search-venues" placeholder="Search venues..." oninput="filterTables('venues')">
+                    <button class="btn btn-ghost" onclick="fetchData('venues')">🔄 Refresh</button>
+                </div>
+                <div class="table-wrapper">
+                    <table id="table-venues">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Venue Name</th>
+                                <th>Location</th>
+                                <th>Capacity</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody-venues"></tbody>
+                    </table>
+                </div>
+                <p class="empty-state" id="empty-venues">No venues found.</p>
+            </section>
+
+            <!-- 5. REFEREES SECTION -->
+            <section class="table-card section-view hidden" id="section-referees">
+                <div class="table-toolbar">
+                    <input type="text" class="search-input" id="search-referees" placeholder="Search referees..." oninput="filterTables('referees')">
+                    <button class="btn btn-ghost" onclick="fetchData('referees')">🔄 Refresh</button>
+                </div>
+                <div class="table-wrapper">
+                    <table id="table-referees">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Experience (Yrs)</th>
+                                <th>Contact Number</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody-referees"></tbody>
+                    </table>
+                </div>
+                <p class="empty-state" id="empty-referees">No referees found.</p>
+            </section>
+
+            <!-- 6. REGISTRATIONS SECTION -->
+            <section class="table-card section-view hidden" id="section-registrations">
+                <div class="table-toolbar">
+                    <input type="text" class="search-input" id="search-registrations" placeholder="Search registrations..." oninput="filterTables('registrations')">
+                    <button class="btn btn-ghost" onclick="fetchData('registrations')">🔄 Refresh</button>
+                </div>
+                <div class="table-wrapper">
+                    <table id="table-registrations">
+                        <thead>
+                            <tr>
+                                <th>Reg ID</th>
+                                <th>Date</th>
+                                <th>Tournament</th>
+                                <th>Team</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody-registrations"></tbody>
+                    </table>
+                </div>
+                <p class="empty-state" id="empty-registrations">No registrations found.</p>
+            </section>
+
+            <!-- 7. MATCHES SECTION -->
+            <section class="table-card section-view hidden" id="section-matches">
+                <div class="table-toolbar">
+                    <input type="text" class="search-input" id="search-matches" placeholder="Search matches..." oninput="filterTables('matches')">
+                    <button class="btn btn-ghost" onclick="fetchData('matches')">🔄 Refresh</button>
+                </div>
+                <div class="table-wrapper">
+                    <table id="table-matches">
+                        <thead>
+                            <tr>
+                                <th>Match ID</th>
+                                <th>Tournament</th>
+                                <th>Date</th>
+                                <th>Time</th>
+                                <th>Type</th>
+                                <th>Venue</th>
+                                <th>Referee</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody-matches"></tbody>
+                    </table>
+                </div>
+                <p class="empty-state" id="empty-matches">No matches found.</p>
+            </section>
+
+            <!-- 8. SCORES SECTION -->
+            <section class="table-card section-view hidden" id="section-scores">
+                <div class="table-toolbar">
+                    <input type="text" class="search-input" id="search-scores" placeholder="Search scores..." oninput="filterTables('scores')">
+                    <button class="btn btn-ghost" onclick="fetchData('scores')">🔄 Refresh</button>
+                </div>
+                <div class="table-wrapper">
+                    <table id="table-scores">
+                        <thead>
+                            <tr>
+                                <th>Score ID</th>
+                                <th>Match ID</th>
+                                <th>Team</th>
+                                <th>Points</th>
+                                <th>Result</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody-scores"></tbody>
+                    </table>
+                </div>
+                <p class="empty-state" id="empty-scores">No scores found.</p>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- ── DYNAMIC MODAL FORMS ── -->
+    <div class="modal-overlay" id="modal-overlay">
+        <!-- The JS will un-hide exactly one form below when opening the modal -->
+        <div class="modal" id="modal-container">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modal-title">Add Record</h3>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+
+            <!-- PLAYER FORM -->
+            <form id="form-players" class="modal-form hidden" autocomplete="off">
+                <input type="hidden" id="players_edit_id">
+                <div class="form-group"><label>Player ID</label><input type="text" id="p_id" required></div>
+                <div class="form-group"><label>Name</label><input type="text" id="p_name" required></div>
+                <div class="form-row">
+                    <div class="form-group"><label>Age</label><input type="number" id="p_age" min="1" required></div>
+                    <div class="form-group"><label>Gender</label>
+                        <select id="p_gender" required>
+                            <option value="" disabled selected>Select</option>
+                            <option value="Male">Male</option><option value="Female">Female</option><option value="Other">Other</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group"><label>Position</label><input type="text" id="p_pos" required></div>
+                    <div class="form-group"><label>Team</label>
+                        <select id="p_team" required><option value="">Select Team</option></select>
+                    </div>
+                </div>
+                <div class="modal-actions"><button type="submit" class="btn btn-primary" id="btn-submit-players">Save</button></div>
+            </form>
+
+            <!-- TEAM FORM -->
+            <form id="form-teams" class="modal-form hidden" autocomplete="off">
+                <input type="hidden" id="teams_edit_id">
+                <div class="form-group"><label>Team ID</label><input type="text" id="t_id" required></div>
+                <div class="form-group"><label>Team Name</label><input type="text" id="t_name" required></div>
+                <div class="form-group"><label>Coach Name</label><input type="text" id="t_coach"></div>
+                <div class="form-row">
+                    <div class="form-group"><label>City</label><input type="text" id="t_city"></div>
+                    <div class="form-group"><label>Contact Number</label><input type="text" id="t_contact"></div>
+                </div>
+                <div class="modal-actions"><button type="submit" class="btn btn-primary" id="btn-submit-teams">Save</button></div>
+            </form>
+
+            <!-- TOURNAMENT FORM -->
+            <form id="form-tournaments" class="modal-form hidden" autocomplete="off">
+                <input type="hidden" id="tournaments_edit_id">
+                <div class="form-group"><label>Tournament ID</label><input type="text" id="tr_id" required></div>
+                <div class="form-group"><label>Name</label><input type="text" id="tr_name" required></div>
+                <div class="form-group"><label>Sport Type</label><input type="text" id="tr_sport" required></div>
+                <div class="form-row">
+                    <div class="form-group"><label>Start Date</label><input type="date" id="tr_start" required></div>
+                    <div class="form-group"><label>End Date</label><input type="date" id="tr_end" required></div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group"><label>Location</label><input type="text" id="tr_loc"></div>
+                    <div class="form-group"><label>Organizer Name</label><input type="text" id="tr_org"></div>
+                </div>
+                <div class="modal-actions"><button type="submit" class="btn btn-primary" id="btn-submit-tournaments">Save</button></div>
+            </form>
+
+            <!-- VENUE FORM -->
+            <form id="form-venues" class="modal-form hidden" autocomplete="off">
+                <input type="hidden" id="venues_edit_id">
+                <div class="form-group"><label>Venue ID</label><input type="text" id="v_id" required></div>
+                <div class="form-group"><label>Venue Name</label><input type="text" id="v_name" required></div>
+                <div class="form-group"><label>Location</label><input type="text" id="v_loc" required></div>
+                <div class="form-group"><label>Capacity</label><input type="number" id="v_cap" min="0"></div>
+                <div class="modal-actions"><button type="submit" class="btn btn-primary" id="btn-submit-venues">Save</button></div>
+            </form>
+
+            <!-- REFEREE FORM -->
+            <form id="form-referees" class="modal-form hidden" autocomplete="off">
+                <input type="hidden" id="referees_edit_id">
+                <div class="form-group"><label>Referee ID</label><input type="text" id="ref_id" required></div>
+                <div class="form-group"><label>Referee Name</label><input type="text" id="ref_name" required></div>
+                <div class="form-row">
+                    <div class="form-group"><label>Experience (Yrs)</label><input type="number" id="ref_exp" min="0"></div>
+                    <div class="form-group"><label>Contact</label><input type="text" id="ref_contact"></div>
+                </div>
+                <div class="modal-actions"><button type="submit" class="btn btn-primary" id="btn-submit-referees">Save</button></div>
+            </form>
+
+            <!-- REGISTRATION FORM -->
+            <form id="form-registrations" class="modal-form hidden" autocomplete="off">
+                <input type="hidden" id="registrations_edit_id">
+                <div class="form-group"><label>Registration ID</label><input type="text" id="reg_id" required></div>
+                <div class="form-group"><label>Registration Date</label><input type="date" id="reg_date" required></div>
+                <div class="form-row">
+                    <div class="form-group"><label>Tournament</label><select id="reg_tourn" required><option value="">Select Tournament</option></select></div>
+                    <div class="form-group"><label>Team</label><select id="reg_team" required><option value="">Select Team</option></select></div>
+                </div>
+                <div class="modal-actions"><button type="submit" class="btn btn-primary" id="btn-submit-registrations">Save</button></div>
+            </form>
+
+            <!-- MATCH FORM -->
+            <form id="form-matches" class="modal-form hidden" autocomplete="off">
+                <input type="hidden" id="matches_edit_id">
+                <div class="form-group"><label>Match ID</label><input type="text" id="m_id" required></div>
+                <div class="form-group"><label>Tournament</label><select id="m_tourn" required><option value="">Select Tournament</option></select></div>
+                <div class="form-row">
+                    <div class="form-group"><label>Date</label><input type="date" id="m_date" required></div>
+                    <div class="form-group"><label>Time (e.g. 14:00)</label><input type="text" id="m_time"></div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group"><label>Match Type</label><input type="text" id="m_type" placeholder="Quarter Final"></div>
+                    <div class="form-group"><label>Venue</label><select id="m_venue"><option value="">Select Venue</option></select></div>
+                </div>
+                <div class="form-group"><label>Referee</label><select id="m_ref"><option value="">Select Referee</option></select></div>
+                <div class="modal-actions"><button type="submit" class="btn btn-primary" id="btn-submit-matches">Save</button></div>
+            </form>
+
+            <!-- SCORE FORM -->
+            <form id="form-scores" class="modal-form hidden" autocomplete="off">
+                <input type="hidden" id="scores_edit_id">
+                <div class="form-group"><label>Score ID</label><input type="text" id="s_id" required></div>
+                <div class="form-group"><label>Match</label><select id="s_match" required><option value="">Select Match</option></select></div>
+                <div class="form-group"><label>Team</label><select id="s_team" required><option value="">Select Team</option></select></div>
+                <div class="form-row">
+                    <div class="form-group"><label>Points Scored</label><input type="number" id="s_pts" value="0"></div>
+                    <div class="form-group"><label>Result</label>
+                        <select id="s_status">
+                            <option value="Won">Won</option><option value="Lost">Lost</option><option value="Draw">Draw</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-actions"><button type="submit" class="btn btn-primary" id="btn-submit-scores">Save</button></div>
+            </form>
+
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
