@@ -28,7 +28,8 @@
                 <h1 class="sidebar-title">Tournament<br><span class="gradient-text">Command</span></h1>
             </div>
             <nav class="sidebar-nav">
-                <a href="#" class="nav-item active" data-section="players"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg></span><span class="nav-label">Players</span></a>
+                <a href="#" class="nav-item active" data-section="dashboard"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="8" height="8" rx="2"></rect><rect x="13" y="3" width="8" height="5" rx="2"></rect><rect x="13" y="10" width="8" height="11" rx="2"></rect><rect x="3" y="13" width="8" height="8" rx="2"></rect></svg></span><span class="nav-label">Dashboard</span></a>
+                <a href="#" class="nav-item" data-section="players"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg></span><span class="nav-label">Players</span></a>
                 <a href="#" class="nav-item" data-section="teams"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"></path><path d="M5 21V7l7-4 7 4v14"></path><path d="M9 9h.01"></path><path d="M15 9h.01"></path><path d="M9 13h.01"></path><path d="M15 13h.01"></path></svg></span><span class="nav-label">Teams</span></a>
                 <a href="#" class="nav-item" data-section="tournaments"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8"></path><path d="M12 17v4"></path><path d="M7 4h10v4a5 5 0 0 1-5 5 5 5 0 0 1-5-5V4Z"></path><path d="M7 6H5a2 2 0 0 0-2 2c0 2.5 1.5 4 4 4"></path><path d="M17 6h2a2 2 0 0 1 2 2c0 2.5-1.5 4-4 4"></path></svg></span><span class="nav-label">Tournaments</span></a>
                 <a href="#" class="nav-item" data-section="venues"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-6-4.35-6-10a6 6 0 1 1 12 0c0 5.65-6 10-6 10Z"></path><circle cx="12" cy="11" r="2.5"></circle></svg></span><span class="nav-label">Venues</span></a>
@@ -43,8 +44,8 @@
         <main class="main-content" id="main-content">
             <header class="content-header">
                 <div>
-                    <h2 class="page-title" id="page-title">Players</h2>
-                    <p class="page-subtitle" id="page-subtitle">Manage all registered players</p>
+                    <h2 class="page-title" id="page-title">Dashboard</h2>
+                    <p class="page-subtitle" id="page-subtitle">Operational snapshot across tournaments, teams, and scores</p>
                 </div>
                 <button class="btn btn-primary" id="btn-add-main" onclick="openModalForActiveSection()">
                     <span class="btn-icon">+</span><span id="btn-add-text">Add Player</span>
@@ -52,7 +53,43 @@
             </header>
             <div class="stats-row" id="stats-row"></div>
 
-            <section class="table-card section-view" id="section-players">
+            <section class="section-view" id="section-dashboard">
+                <div class="dashboard-grid">
+                    <article class="table-card chart-card">
+                        <h3 class="panel-title">Tournament Mix by Sport</h3>
+                        <p class="panel-subtitle">Distribution of all scheduled tournaments</p>
+                        <div class="bar-chart" id="chart-sport-mix"></div>
+                    </article>
+                    <article class="table-card chart-card">
+                        <h3 class="panel-title">Result Outcomes</h3>
+                        <p class="panel-subtitle">Win/Loss/Draw split from recorded scores</p>
+                        <div class="donut-shell">
+                            <div class="donut-chart" id="chart-results"></div>
+                            <div class="donut-legend" id="chart-results-legend"></div>
+                        </div>
+                    </article>
+                    <article class="table-card chart-card chart-card-wide">
+                        <h3 class="panel-title">Venue Utilization</h3>
+                        <p class="panel-subtitle">Matches hosted per venue</p>
+                        <div class="hbar-chart" id="chart-venue-utilization"></div>
+                    </article>
+                    <article class="table-card chart-card chart-card-wide">
+                        <h3 class="panel-title">Top Teams Leaderboard</h3>
+                        <p class="panel-subtitle">Ranked by aggregate points scored</p>
+                        <div class="table-wrapper">
+                            <table>
+                                <thead>
+                                    <tr><th>Rank</th><th>Team</th><th>Total Points</th><th>Entries</th></tr>
+                                </thead>
+                                <tbody id="tbody-top-teams"></tbody>
+                            </table>
+                        </div>
+                        <p class="empty-state" id="empty-top-teams">No score data found.</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="table-card section-view hidden" id="section-players">
                 <div class="table-toolbar">
                     <div class="search-shell"><span class="search-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg></span><input type="text" class="search-input" id="search-players" placeholder="Search players..." oninput="filterTables('players')"></div>
                     <button class="icon-button" type="button" onclick="fetchData('players')" aria-label="Refresh players"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 1-15.55 6.36"></path><path d="M3 12A9 9 0 0 1 18.55 5.64"></path><path d="M21 3v6h-6"></path><path d="M3 21v-6h6"></path></svg></button>
