@@ -90,12 +90,16 @@ body {
 
 .sidebar {
     width: 100%;
+    max-width: none;
     position: sticky;
     top: 0;
     z-index: 2000;
     padding: 14px 20px;
+    margin: 0;
     background: rgba(30, 41, 59, 0.92);
     border-bottom: 1px solid var(--border);
+    border: 1px solid var(--border);
+    border-radius: 0;
     box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.04);
     backdrop-filter: blur(16px);
     display: flex;
@@ -694,6 +698,8 @@ tbody tr:last-child td { border-bottom: none; }
     .sidebar {
         position: static;
         flex-wrap: wrap;
+        width: 100%;
+        margin: 0;
         padding: 14px;
     }
     .sidebar-nav {
