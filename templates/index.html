@@ -38,7 +38,6 @@
                 <a href="#" class="nav-item" data-section="matches"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"></rect><path d="M16 2v4"></path><path d="M8 2v4"></path><path d="M3 10h18"></path><path d="M8 14h3"></path><path d="M13 14h3"></path></svg></span><span class="nav-label">Matches</span></a>
                 <a href="#" class="nav-item" data-section="scores"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"></path><path d="M7 15l3-3 3 2 4-5"></path></svg></span><span class="nav-label">Scores</span></a>
             </nav>
-            <div class="sidebar-footer"><p>&copy; 2026 STS</p></div>
         </aside>
 
         <main class="main-content" id="main-content">
@@ -94,7 +93,7 @@
                     <div class="search-shell"><span class="search-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg></span><input type="text" class="search-input" id="search-players" placeholder="Search players..." oninput="filterTables('players')"></div>
                     <button class="icon-button" type="button" onclick="fetchData('players')" aria-label="Refresh players"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 1-15.55 6.36"></path><path d="M3 12A9 9 0 0 1 18.55 5.64"></path><path d="M21 3v6h-6"></path><path d="M3 21v-6h6"></path></svg></button>
                 </div>
-                <div class="table-wrapper"><table id="table-players"><thead><tr><th>ID</th><th>Name</th><th>Age</th><th>Gender</th><th>Position</th><th>Team</th><th>Actions</th></tr></thead><tbody id="tbody-players"></tbody></table></div>
+                <div class="table-wrapper"><table id="table-players"><thead><tr><th class="sortable" data-sort="PLAYER_ID">ID</th><th class="sortable" data-sort="PLAYER_NAME">Name</th><th class="sortable" data-sort="AGE">Age</th><th class="sortable" data-sort="GENDER">Gender</th><th class="sortable" data-sort="POSITION">Position</th><th class="sortable" data-sort="TEAM_NAME">Team</th><th>Actions</th></tr></thead><tbody id="tbody-players"></tbody></table></div>
                 <p class="empty-state" id="empty-players">No players found.</p>
             </section>
 
@@ -103,7 +102,7 @@
                     <div class="search-shell"><span class="search-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg></span><input type="text" class="search-input" id="search-teams" placeholder="Search teams..." oninput="filterTables('teams')"></div>
                     <button class="icon-button" type="button" onclick="fetchData('teams')" aria-label="Refresh teams"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 1-15.55 6.36"></path><path d="M3 12A9 9 0 0 1 18.55 5.64"></path><path d="M21 3v6h-6"></path><path d="M3 21v-6h6"></path></svg></button>
                 </div>
-                <div class="table-wrapper"><table id="table-teams"><thead><tr><th>ID</th><th>Team Name</th><th>Coach Name</th><th>City</th><th>Contact Number</th><th>Actions</th></tr></thead><tbody id="tbody-teams"></tbody></table></div>
+                <div class="table-wrapper"><table id="table-teams"><thead><tr><th class="sortable" data-sort="TEAM_ID">ID</th><th class="sortable" data-sort="TEAM_NAME">Team Name</th><th class="sortable" data-sort="COACH_NAME">Coach Name</th><th class="sortable" data-sort="CITY">City</th><th class="sortable" data-sort="CONTACT_NUMBER">Contact Number</th><th>Actions</th></tr></thead><tbody id="tbody-teams"></tbody></table></div>
                 <p class="empty-state" id="empty-teams">No teams found.</p>
             </section>
 
@@ -112,7 +111,7 @@
                     <div class="search-shell"><span class="search-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg></span><input type="text" class="search-input" id="search-tournaments" placeholder="Search tournaments..." oninput="filterTables('tournaments')"></div>
                     <button class="icon-button" type="button" onclick="fetchData('tournaments')" aria-label="Refresh tournaments"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 1-15.55 6.36"></path><path d="M3 12A9 9 0 0 1 18.55 5.64"></path><path d="M21 3v6h-6"></path><path d="M3 21v-6h6"></path></svg></button>
                 </div>
-                <div class="table-wrapper"><table id="table-tournaments"><thead><tr><th>ID</th><th>Name</th><th>Sport Type</th><th>Start Date</th><th>End Date</th><th>Location</th><th>Organizer</th><th>Actions</th></tr></thead><tbody id="tbody-tournaments"></tbody></table></div>
+                <div class="table-wrapper"><table id="table-tournaments"><thead><tr><th class="sortable" data-sort="TOURNAMENT_ID">ID</th><th class="sortable" data-sort="TOURNAMENT_NAME">Name</th><th class="sortable" data-sort="SPORT_TYPE">Sport Type</th><th class="sortable" data-sort="START_DATE">Start Date</th><th class="sortable" data-sort="END_DATE">End Date</th><th class="sortable" data-sort="LOCATION">Location</th><th class="sortable" data-sort="ORGANIZER_NAME">Organizer</th><th>Actions</th></tr></thead><tbody id="tbody-tournaments"></tbody></table></div>
                 <p class="empty-state" id="empty-tournaments">No tournaments found.</p>
             </section>
 
@@ -121,7 +120,7 @@
                     <div class="search-shell"><span class="search-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg></span><input type="text" class="search-input" id="search-venues" placeholder="Search venues..." oninput="filterTables('venues')"></div>
                     <button class="icon-button" type="button" onclick="fetchData('venues')" aria-label="Refresh venues"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 1-15.55 6.36"></path><path d="M3 12A9 9 0 0 1 18.55 5.64"></path><path d="M21 3v6h-6"></path><path d="M3 21v-6h6"></path></svg></button>
                 </div>
-                <div class="table-wrapper"><table id="table-venues"><thead><tr><th>ID</th><th>Venue Name</th><th>Location</th><th>Capacity</th><th>Actions</th></tr></thead><tbody id="tbody-venues"></tbody></table></div>
+                <div class="table-wrapper"><table id="table-venues"><thead><tr><th class="sortable" data-sort="VENUE_ID">ID</th><th class="sortable" data-sort="VENUE_NAME">Venue Name</th><th class="sortable" data-sort="LOCATION">Location</th><th class="sortable" data-sort="CAPACITY">Capacity</th><th>Actions</th></tr></thead><tbody id="tbody-venues"></tbody></table></div>
                 <p class="empty-state" id="empty-venues">No venues found.</p>
             </section>
 
@@ -130,7 +129,7 @@
                     <div class="search-shell"><span class="search-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg></span><input type="text" class="search-input" id="search-referees" placeholder="Search referees..." oninput="filterTables('referees')"></div>
                     <button class="icon-button" type="button" onclick="fetchData('referees')" aria-label="Refresh referees"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 1-15.55 6.36"></path><path d="M3 12A9 9 0 0 1 18.55 5.64"></path><path d="M21 3v6h-6"></path><path d="M3 21v-6h6"></path></svg></button>
                 </div>
-                <div class="table-wrapper"><table id="table-referees"><thead><tr><th>ID</th><th>Name</th><th>Experience (Yrs)</th><th>Contact Number</th><th>Actions</th></tr></thead><tbody id="tbody-referees"></tbody></table></div>
+                <div class="table-wrapper"><table id="table-referees"><thead><tr><th class="sortable" data-sort="REFEREE_ID">ID</th><th class="sortable" data-sort="REFEREE_NAME">Name</th><th class="sortable" data-sort="EXPERIENCE_YEARS">Experience (Yrs)</th><th class="sortable" data-sort="CONTACT_NUMBER">Contact Number</th><th>Actions</th></tr></thead><tbody id="tbody-referees"></tbody></table></div>
                 <p class="empty-state" id="empty-referees">No referees found.</p>
             </section>
 
@@ -139,7 +138,7 @@
                     <div class="search-shell"><span class="search-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg></span><input type="text" class="search-input" id="search-registrations" placeholder="Search registrations..." oninput="filterTables('registrations')"></div>
                     <button class="icon-button" type="button" onclick="fetchData('registrations')" aria-label="Refresh registrations"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 1-15.55 6.36"></path><path d="M3 12A9 9 0 0 1 18.55 5.64"></path><path d="M21 3v6h-6"></path><path d="M3 21v-6h6"></path></svg></button>
                 </div>
-                <div class="table-wrapper"><table id="table-registrations"><thead><tr><th>Reg ID</th><th>Date</th><th>Tournament</th><th>Team</th><th>Actions</th></tr></thead><tbody id="tbody-registrations"></tbody></table></div>
+                <div class="table-wrapper"><table id="table-registrations"><thead><tr><th class="sortable" data-sort="REGISTRATION_ID">Reg ID</th><th class="sortable" data-sort="REGISTRATION_DATE">Date</th><th class="sortable" data-sort="TOURNAMENT_NAME">Tournament</th><th class="sortable" data-sort="TEAM_NAME">Team</th><th>Actions</th></tr></thead><tbody id="tbody-registrations"></tbody></table></div>
                 <p class="empty-state" id="empty-registrations">No registrations found.</p>
             </section>
 
@@ -148,7 +147,7 @@
                     <div class="search-shell"><span class="search-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg></span><input type="text" class="search-input" id="search-matches" placeholder="Search matches..." oninput="filterTables('matches')"></div>
                     <button class="icon-button" type="button" onclick="fetchData('matches')" aria-label="Refresh matches"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 1-15.55 6.36"></path><path d="M3 12A9 9 0 0 1 18.55 5.64"></path><path d="M21 3v6h-6"></path><path d="M3 21v-6h6"></path></svg></button>
                 </div>
-                <div class="table-wrapper"><table id="table-matches"><thead><tr><th>Match ID</th><th>Tournament</th><th>Date</th><th>Time</th><th>Type</th><th>Venue</th><th>Referee</th><th>Actions</th></tr></thead><tbody id="tbody-matches"></tbody></table></div>
+                <div class="table-wrapper"><table id="table-matches"><thead><tr><th class="sortable" data-sort="MATCH_ID">Match ID</th><th class="sortable" data-sort="TOURNAMENT_NAME">Tournament</th><th class="sortable" data-sort="MATCH_DATE">Date</th><th class="sortable" data-sort="MATCH_TIME">Time</th><th class="sortable" data-sort="MATCH_TYPE">Type</th><th class="sortable" data-sort="VENUE_NAME">Venue</th><th class="sortable" data-sort="REFEREE_NAME">Referee</th><th>Actions</th></tr></thead><tbody id="tbody-matches"></tbody></table></div>
                 <p class="empty-state" id="empty-matches">No matches found.</p>
             </section>
 
@@ -157,7 +156,7 @@
                     <div class="search-shell"><span class="search-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg></span><input type="text" class="search-input" id="search-scores" placeholder="Search scores..." oninput="filterTables('scores')"></div>
                     <button class="icon-button" type="button" onclick="fetchData('scores')" aria-label="Refresh scores"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 1-15.55 6.36"></path><path d="M3 12A9 9 0 0 1 18.55 5.64"></path><path d="M21 3v6h-6"></path><path d="M3 21v-6h6"></path></svg></button>
                 </div>
-                <div class="table-wrapper"><table id="table-scores"><thead><tr><th>Score ID</th><th>Match ID</th><th>Team</th><th>Points</th><th>Result</th><th>Actions</th></tr></thead><tbody id="tbody-scores"></tbody></table></div>
+                <div class="table-wrapper"><table id="table-scores"><thead><tr><th class="sortable" data-sort="SCORE_ID">Score ID</th><th class="sortable" data-sort="MATCH_ID">Match ID</th><th class="sortable" data-sort="TEAM_NAME">Team</th><th class="sortable" data-sort="POINTS_SCORED">Points</th><th class="sortable" data-sort="RESULT_STATUS">Result</th><th>Actions</th></tr></thead><tbody id="tbody-scores"></tbody></table></div>
                 <p class="empty-state" id="empty-scores">No scores found.</p>
             </section>
         </main>

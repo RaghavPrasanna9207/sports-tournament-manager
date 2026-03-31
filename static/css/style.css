@@ -487,6 +487,29 @@ thead th {
     letter-spacing: 0.12em;
     white-space: nowrap;
 }
+thead th.sortable {
+    cursor: pointer;
+    user-select: none;
+    position: relative;
+    transition: color var(--transition);
+}
+thead th.sortable:hover {
+    color: var(--text-secondary);
+}
+thead th.sortable::after {
+    content: "↕";
+    margin-left: 6px;
+    font-size: 0.72rem;
+    color: #7d8ba3;
+}
+thead th.sortable.sorted-asc::after {
+    content: "↑";
+    color: #c4b5fd;
+}
+thead th.sortable.sorted-desc::after {
+    content: "↓";
+    color: #c4b5fd;
+}
 tbody td {
     padding: 16px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.06);

@@ -17,6 +17,7 @@ const SECTION_META = {
 };
 
 let dataCache = { players: [], teams: [], tournaments: [], venues: [], referees: [], registrations: [], matches: [], scores: [] };
+let sortState = {};
 
 const eb = document.getElementById('error-banner');
 const ebt = document.getElementById('error-banner-text');
@@ -94,6 +95,13 @@ function avg(values) {
 function num(v) {
     const parsed = Number(v);
     return Number.isFinite(parsed) ? parsed : 0;
+}
+
+function initSortState() {
+    sortState = {};
+    DATA_SECTIONS.forEach(section => {
+        sortState[section] = { key: null, direction: 'asc' };
+    });
 }
 
 document.querySelectorAll('.nav-item').forEach(link => {
@@ -179,6 +187,79 @@ function actionButtons(section, pk) {
         <button class="action-btn delete" type="button" aria-label="Delete" onclick="deleteRecord('${section}', '${escAttr(pk)}')">${ICONS.trash}</button>
     </td>`;
 }
+
+function getSortValue(section, item, key) {
+    if (section === 'players' && key === 'TEAM_NAME') return lookupName('teams', 'TEAM_ID', item.TEAM_ID, 'TEAM_NAME');
+    if (section === 'registrations' && key === 'TOURNAMENT_NAME') return lookupName('tournaments', 'TOURNAMENT_ID', item.TOURNAMENT_ID, 'TOURNAMENT_NAME');
+    if (section === 'registrations' && key === 'TEAM_NAME') return lookupName('teams', 'TEAM_ID', item.TEAM_ID, 'TEAM_NAME');
+    if (section === 'matches' && key === 'TOURNAMENT_NAME') return lookupName('tournaments', 'TOURNAMENT_ID', item.TOURNAMENT_ID, 'TOURNAMENT_NAME');
+    if (section === 'matches' && key === 'VENUE_NAME') return lookupName('venues', 'VENUE_ID', item.VENUE_ID, 'VENUE_NAME');
+    if (section === 'matches' && key === 'REFEREE_NAME') return lookupName('referees', 'REFEREE_ID', item.REFEREE_ID, 'REFEREE_NAME');
+    if (section === 'scores' && key === 'TEAM_NAME') return lookupName('teams', 'TEAM_ID', item.TEAM_ID, 'TEAM_NAME');
+    return item[key];
+}
+
+function normalizeForSort(value) {
+    if (value === null || value === undefined) return '';
+    const asNumber = Number(value);
+    if (Number.isFinite(asNumber) && String(value).trim() !== '') return asNumber;
+    const asDate = new Date(value);
+    if (!isNaN(asDate)) return asDate.getTime();
+    return String(value).toLowerCase();
+}
+
+function sortData(section, data) {
+    const state = sortState[section];
+    if (!state || !state.key) return [...data];
+
+    const dir = state.direction === 'desc' ? -1 : 1;
+    return [...data].sort((a, b) => {
+        const va = normalizeForSort(getSortValue(section, a, state.key));
+        const vb = normalizeForSort(getSortValue(section, b, state.key));
+        if (va < vb) return -1 * dir;
+        if (va > vb) return 1 * dir;
+        return 0;
+    });
+}
+
+function updateSortIndicators(section) {
+    const table = document.getElementById(`table-${section}`);
+    if (!table) return;
+    const state = sortState[section];
+
+    table.querySelectorAll('th.sortable').forEach(th => {
+        th.classList.remove('sorted-asc', 'sorted-desc');
+        if (!state || !state.key) return;
+        if (th.dataset.sort === state.key) {
+            th.classList.add(state.direction === 'asc' ? 'sorted-asc' : 'sorted-desc');
+        }
+    });
+}
+
+function initSortingHandlers() {
+    document.querySelectorAll('table[id^="table-"] th.sortable').forEach(th => {
+        th.addEventListener('click', () => {
+            const table = th.closest('table');
+            if (!table) return;
+            const section = table.id.replace('table-', '');
+            if (!DATA_SECTIONS.includes(section)) return;
+
+            const key = th.dataset.sort;
+            const state = sortState[section];
+            if (!state) return;
+
+            if (state.key === key) {
+                state.direction = state.direction === 'asc' ? 'desc' : 'asc';
+            } else {
+                state.key = key;
+                state.direction = 'asc';
+            }
+
+            updateSortIndicators(section);
+            filterTables(section);
+        });
+    });
+}
 function renderTable(section, data) {
     const tbody = document.getElementById(`tbody-${section}`);
     const empty = document.getElementById(`empty-${section}`);
@@ -186,18 +267,20 @@ function renderTable(section, data) {
 
     if (!tbody || !empty || !table) return;
 
+    const sortedData = sortData(section, data);
     tbody.innerHTML = '';
 
-    if (data.length === 0) {
+    if (sortedData.length === 0) {
         empty.style.display = 'block';
         table.style.display = 'none';
+        updateSortIndicators(section);
         return;
     }
 
     empty.style.display = 'none';
     table.style.display = 'table';
 
-    data.forEach(item => {
+    sortedData.forEach(item => {
         const tr = document.createElement('tr');
         let content = '';
 
@@ -273,6 +356,8 @@ function renderTable(section, data) {
         tr.innerHTML = content + actionButtons(section, pk);
         tbody.appendChild(tr);
     });
+
+    updateSortIndicators(section);
 }
 
 function statCard(title, value, subtitle, icon) {
@@ -773,4 +858,6 @@ function extractFormData(sec) {
     if (sec === 'scores') return { score_id: document.getElementById('s_id').value.trim(), match_id: document.getElementById('s_match').value.trim(), team_id: document.getElementById('s_team').value.trim(), points_scored: parseInt(document.getElementById('s_pts').value, 10), result_status: document.getElementById('s_status').value };
 }
 
+initSortState();
+initSortingHandlers();
 switchSection('dashboard');
